@@ -60,15 +60,19 @@ class AlienInvasion:
         """Запускает новую игру при нажатии кнопки Play."""
         button_clicker = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicker and not self.stats.game_active:
-            self.stats.reset_stats()
-            self.stats.game_active = True
+            self.settings.initialize_dynamic_settings()
+            self._start_game()
 
-            self.aliens.empty()
-            self.bullets.empty()
-            self._create_fleet()
-            self.ship.center_ship()
+    def _start_game(self):
+        self.stats.reset_stats()
+        self.stats.game_active = True
 
-            pygame.mouse.set_visible(False)
+        self.aliens.empty()
+        self.bullets.empty()
+        self._create_fleet()
+        self.ship.center_ship()
+
+        pygame.mouse.set_visible(False)
 
     def _check_keydown_event(self, event):
         """Реагирует на нажатие клавиш"""
@@ -78,8 +82,10 @@ class AlienInvasion:
             self.ship.moving_left = True
         elif event.key == pygame.K_q:
             sys.exit()
-        elif event.key == pygame.K_SPACE:
+        elif event.key == pygame.K_SPACE and self.stats.game_active:
             self._fire_bullet()
+        elif event.key == pygame.K_p and not self.stats.game_active:
+            self._start_game()
 
     def _check_keyup_event(self, event):
         """Реагирует на отпускание клавиш"""
@@ -109,6 +115,7 @@ class AlienInvasion:
         if not self.aliens:
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
 
     def _update_aliens(self):
         """Проверяет, достиг ли флот края экрана,
