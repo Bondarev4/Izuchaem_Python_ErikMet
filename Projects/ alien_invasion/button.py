@@ -73,7 +73,7 @@ class ButtonEasy(ButtonStart):
         flag_difficulty_game = True
         self.settings.initialize_dynamic_settings(ship_speed=5,
                                                   bullet_speed=8.0,
-                                                  alien_speed=1)
+                                                  alien_speed=0.6)
 
 
 class ButtonMedium(ButtonEasy):
@@ -99,7 +99,7 @@ class ButtonMedium(ButtonEasy):
         flag_difficulty_game = True
         self.settings.initialize_dynamic_settings(ship_speed=4.0,
                                                   bullet_speed=6.0,
-                                                  alien_speed=1.75)
+                                                  alien_speed=1)
 
 
 class ButtonHard(ButtonEasy):
@@ -126,7 +126,7 @@ class ButtonHard(ButtonEasy):
         flag_difficulty_game = True
         self.settings.initialize_dynamic_settings(ship_speed=2.0,
                                                   bullet_speed=3.0,
-                                                  alien_speed=2.5)
+                                                  alien_speed=1.5)
 
 
 class GameMenu:
