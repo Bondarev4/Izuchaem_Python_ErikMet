@@ -25,15 +25,15 @@ class Settings:
 
         self.initialize_dynamic_settings()
 
-    def initialize_dynamic_settings(self):
+    def initialize_dynamic_settings(self, ship_speed=4.0, bullet_speed=6.0, alien_speed=1.75):
         """Инициализирует настройки, изменяющиеся в ходе игры."""
-        self.ship_speed = 1.5
-        self.bullet_speed = 3.0
-        self.alien_speed = 1.0
+        self.ship_speed = ship_speed
+        self.bullet_speed = bullet_speed
+        self.alien_speed = alien_speed
         self.fleet_direction = 1  # 1 - движение вправо, -1 - влево
 
     def increase_speed(self):
         """Увеличение настройки скорости."""
         self.ship_speed *= self.speedcup_scale
-        self.bullet_speed*= self.speedcup_scale
+        self.bullet_speed *= self.speedcup_scale
         self.alien_speed *= self.speedcup_scale

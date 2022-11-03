@@ -7,7 +7,7 @@ from game_stats import GameStats
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
-from button import Button
+from button import GameMenu
 
 
 class AlienInvasion:
@@ -29,7 +29,7 @@ class AlienInvasion:
 
         self._create_fleet()
 
-        self.play_button = Button(self, 'Play')
+        self.game_menu = GameMenu(self)
 
     def run_game(self):
         """Запуск игрового цикла игры."""
@@ -58,10 +58,9 @@ class AlienInvasion:
 
     def _check_play_button(self, mouse_pos):
         """Запускает новую игру при нажатии кнопки Play."""
-        button_clicker = self.play_button.rect.collidepoint(mouse_pos)
-        if button_clicker and not self.stats.game_active:
-            self.settings.initialize_dynamic_settings()
-            self._start_game()
+        if not self.stats.game_active:
+            for collide_checker in self.game_menu.button_action:
+                collide_checker(mouse_pos)
 
     def _start_game(self):
         self.stats.reset_stats()
@@ -85,7 +84,7 @@ class AlienInvasion:
         elif event.key == pygame.K_SPACE and self.stats.game_active:
             self._fire_bullet()
         elif event.key == pygame.K_p and not self.stats.game_active:
-            self._start_game()
+            self.game_menu.button_start.button_func()
 
     def _check_keyup_event(self, event):
         """Реагирует на отпускание клавиш"""
@@ -195,7 +194,7 @@ class AlienInvasion:
         self.aliens.draw(self.screen)
 
         if not self.stats.game_active:
-            self.play_button.draw_button()
+            self.game_menu.show_menu()
 
         pygame.display.flip()
 
