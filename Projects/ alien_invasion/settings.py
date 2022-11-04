@@ -4,15 +4,15 @@ class Settings:
     def __init__(self):
         """Инициализирует статические настройки игры."""
         # Параметры экрана
-        self.screen_width = 1000
-        self.screen_height = 800
+        self.screen_width = 900
+        self.screen_height = 950
         self.bg_color = (230, 230, 230)
 
         # Настройка корабля
-        self.ship_limit = 0
+        self.ship_limit = 1
 
         # Параметры снаряда
-        self.bullet_width = 4
+        self.bullet_width = 400
         self.bullet_height = 16
         self.bullet_color = (60, 60, 60)
         self.bullets_allowed = 5
@@ -27,7 +27,7 @@ class Settings:
 
         self.initialize_dynamic_settings()
 
-    def initialize_dynamic_settings(self, ship_speed=4.0, bullet_speed=6.0, alien_speed=1):
+    def initialize_dynamic_settings(self, ship_speed=2.0, bullet_speed=6.0, alien_speed=1):
         """Инициализирует настройки, изменяющиеся в ходе игры."""
         self.ship_speed = ship_speed
         self.bullet_speed = bullet_speed

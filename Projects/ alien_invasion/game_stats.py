@@ -8,9 +8,13 @@ class GameStats:
 
         self.game_active = False
 
-        self.high_score = 0
+        with open('record.txt', 'r') as f:
+            self.high_score = int(f.read())
+            if not self.high_score:
+                self.high_score = 0
 
     def reset_stats(self):
         """Инициализирует статистику, изменяющуюся в ходе игры."""
         self.ships_left = self.settings.ship_limit
         self.score = 0
+        self.level = 1

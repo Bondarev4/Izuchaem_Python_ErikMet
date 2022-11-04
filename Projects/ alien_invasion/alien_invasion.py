@@ -22,6 +22,9 @@ class AlienInvasion:
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption('Alien Invasion')
 
+        self.params_initialization()
+
+    def params_initialization(self):
         self.stats = GameStats(self)
         self.sb = ScoreBoard(self)
 
@@ -49,6 +52,8 @@ class AlienInvasion:
         """Обрабатывает нажатия клавиш и события мыши."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                with open('record.txt', 'w') as f:
+                    f.write(str(self.stats.high_score))
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_event(event)
@@ -63,11 +68,13 @@ class AlienInvasion:
         if not self.stats.game_active:
             for collide_checker in self.game_menu.button_action:
                 collide_checker(mouse_pos)
+            self.sb.prep_score()
+            self.sb.prep_level()
+            self.sb.prep_ships()
 
     def _start_game(self):
         self.stats.reset_stats()
         self.stats.game_active = True
-        self.sb.prep_score()
 
         self.aliens.empty()
         self.bullets.empty()
@@ -83,10 +90,12 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
         elif event.key == pygame.K_q:
+            with open('record.txt', 'w') as f:
+                f.write(str(self.stats.high_score))
             sys.exit()
         elif event.key == pygame.K_SPACE and self.stats.game_active:
             self._fire_bullet()
-        elif event.key == pygame.K_p and not self.stats.game_active:
+        elif event.key == pygame.K_p:
             self.game_menu.button_start.button_func()
 
     def _check_keyup_event(self, event):
@@ -118,10 +127,16 @@ class AlienInvasion:
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
             self.sb.prep_score()
+            self.sb.check_high_score()
         if not self.aliens:
-            self.bullets.empty()
-            self._create_fleet()
-            self.settings.increase_speed()
+            self._start_new_level()
+
+    def _start_new_level(self):
+        self.bullets.empty()
+        self._create_fleet()
+        self.settings.increase_speed()
+        self.stats.level += 1
+        self.sb.prep_level()
 
     def _update_aliens(self):
         """Проверяет, достиг ли флот края экрана,
@@ -136,6 +151,7 @@ class AlienInvasion:
         """Обрабатывает столкновение корабля с пришельцем."""
         if self.stats.ships_left > 0:
             self.stats.ships_left -= 1
+            self.sb.prep_ships()
             self.aliens.empty()
             self.bullets.empty()
             self._create_fleet()
